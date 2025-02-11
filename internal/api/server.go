@@ -18,6 +18,7 @@ type Server struct {
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	db := config.ConnectToDatabase()
+	db.CreateTables()
 
 	NewServer := &Server{
 		port: port,
