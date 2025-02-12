@@ -14,7 +14,7 @@ type Database interface {
 }
 
 type database struct {
-	db *pgx.Conn
+	pgx *pgx.Conn
 }
 
 var dbInstance *database
@@ -25,24 +25,24 @@ func ConnectToDatabase() Database {
 	}
 
 	connStr := "postgres://postgres:postgres@localhost:5432/job-tagger"
-	db, err := pgx.Connect(context.Background(), connStr)
+	conn, err := pgx.Connect(context.Background(), connStr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	dbInstance = &database{db: db}
+	dbInstance = &database{pgx: conn}
 
 	return dbInstance
 }
 
-func (d *database) CreateTables() {
+func (database *database) CreateTables() {
 	workDir, _ := os.Getwd()
 	sql, readError := os.ReadFile(fmt.Sprintf("%s/internal/config/schema.sql", workDir))
 	if readError != nil {
 		panic(fmt.Sprintln(readError))
 	}
 
-	_, execError := d.db.Exec(context.Background(), string(sql))
+	_, execError := database.pgx.Exec(context.Background(), string(sql))
 	if execError != nil {
 		panic(fmt.Sprintln(execError))
 	}
