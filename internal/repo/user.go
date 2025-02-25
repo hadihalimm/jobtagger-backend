@@ -22,11 +22,11 @@ func NewUserRepo(db *config.Database) UserRepo {
 }
 
 func (r *userRepo) Save(ctx context.Context, user *model.User) (*model.User, error) {
-	query := `INSERT INTO users (full_name, email) VALUES ($1, $2) RETURNING id, full_name, email, created_at, updated_at`
+	query := `INSERT INTO users (full_name, email, avatar_url) VALUES ($1, $2, $3) RETURNING id, full_name, email, avatar_url, created_at, updated_at`
 	var savedUser model.User
 	err := r.db.Pgx.QueryRow(ctx, query,
-		user.FullName, user.Email).Scan(
-		&savedUser.ID, &savedUser.FullName, &savedUser.Email, &savedUser.CreatedAt, &savedUser.UpdatedAt)
+		user.FullName, user.Email, user.AvatarURL).Scan(
+		&savedUser.ID, &savedUser.FullName, &savedUser.Email, &savedUser.AvatarURL, &savedUser.CreatedAt, &savedUser.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
