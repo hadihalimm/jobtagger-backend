@@ -10,7 +10,7 @@ CREATE TABLE users (
 DROP TYPE IF EXISTS progress;
 CREATE TYPE progress AS ENUM('Applied', 'Assessment', 'Interview', 'Offering', 'Accepted', 'Withdrew', 'Closed');
 
-CREATE TABLE IF NOT EXISTS applications (
+CREATE TABLE IF NOT EXISTS job_applications (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     job_position VARCHAR(100) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS applications (
 
 CREATE TABLE IF NOT EXISTS timelines (
     id SERIAL PRIMARY KEY,
-    application_id INT NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
     timeline_name VARCHAR(100) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS timelines (
 
 CREATE TABLE IF NOT EXISTS interviews (
     id SERIAL PRIMARY KEY,
-    application_id INT NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
     interview_title VARCHAR(100) NOT NULL,
     interview_date DATE,
     notes TEXT,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS interviews (
 
 CREATE TABLE IF NOT EXISTS contacts (
     id SERIAL PRIMARY KEY,
-    application_id INT NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
     contact_name VARCHAR(100) NOT NULL,
     contact_email VARCHAR(100),
     contact_phone VARCHAR(20),
