@@ -53,7 +53,7 @@ func (s *authService) AuthCallback(w http.ResponseWriter, r *http.Request) (*mod
 	var user *model.User
 	user, err = s.userRepo.FindByEmail(r.Context(), authUser.Email)
 	if err != nil {
-		newUser := &model.User{FullName: authUser.Name, Email: authUser.Email}
+		newUser := &model.User{FullName: authUser.Name, Email: authUser.Email, AvatarURL: authUser.AvatarURL}
 		user, err = s.userRepo.Save(r.Context(), newUser)
 		if err != nil {
 			return nil, err
