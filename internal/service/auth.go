@@ -53,7 +53,7 @@ func (s *authService) AuthCallback(w http.ResponseWriter, r *http.Request) (*mod
 	var user *model.User
 	user, err = s.userRepo.FindByEmail(r.Context(), authUser.Email)
 	if err != nil {
-		newUser := &model.User{FullName: authUser.Name, Email: authUser.Email, AvatarURL: authUser.AvatarURL}
+		newUser := model.User{FullName: authUser.Name, Email: authUser.Email, AvatarURL: authUser.AvatarURL}
 		user, err = s.userRepo.Save(r.Context(), newUser)
 		if err != nil {
 			return nil, err
@@ -81,7 +81,7 @@ func (s *authService) GenerateAccessToken(id uuid.UUID) (string, error) {
 }
 
 func (s *authService) GenerateRefreshToken(r *http.Request, id uuid.UUID) (string, error) {
-	newRefreshToken := &model.RefreshToken{UserId: id, ExpiresAt: time.Now().Add(time.Hour * 24 * 14)}
+	newRefreshToken := model.RefreshToken{UserId: id, ExpiresAt: time.Now().Add(time.Hour * 24 * 14)}
 	refreshToken, err := s.refreshTokenRepo.Save(r.Context(), newRefreshToken)
 	if err != nil {
 		return "", err

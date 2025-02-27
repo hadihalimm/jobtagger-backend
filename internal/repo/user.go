@@ -9,7 +9,7 @@ import (
 )
 
 type UserRepo interface {
-	Save(ctx context.Context, user *model.User) (*model.User, error)
+	Save(ctx context.Context, user model.User) (*model.User, error)
 	FindByEmail(ctx context.Context, email string) (*model.User, error)
 }
 
@@ -21,7 +21,7 @@ func NewUserRepo(db *config.Database) UserRepo {
 	return &userRepo{db: db}
 }
 
-func (r *userRepo) Save(ctx context.Context, user *model.User) (*model.User, error) {
+func (r *userRepo) Save(ctx context.Context, user model.User) (*model.User, error) {
 	query := `INSERT INTO users (full_name, email, avatar_url) VALUES ($1, $2, $3) RETURNING id, full_name, email, avatar_url, created_at, updated_at`
 	var savedUser model.User
 	err := r.db.Pgx.QueryRow(ctx, query,
