@@ -9,7 +9,7 @@ import (
 )
 
 type RefreshTokenRepo interface {
-	Save(ctx context.Context, token *model.RefreshToken) (*model.RefreshToken, error)
+	Save(ctx context.Context, token model.RefreshToken) (*model.RefreshToken, error)
 	FindByToken(ctx context.Context, token uuid.UUID) (*model.RefreshToken, error)
 	Delete(ctx context.Context, token uuid.UUID) error
 }
@@ -22,7 +22,7 @@ func NewRefreshTokenRepo(db *config.Database) RefreshTokenRepo {
 	return &refreshTokenRepo{db: db}
 }
 
-func (r *refreshTokenRepo) Save(ctx context.Context, token *model.RefreshToken) (*model.RefreshToken, error) {
+func (r *refreshTokenRepo) Save(ctx context.Context, token model.RefreshToken) (*model.RefreshToken, error) {
 	query := `INSERT INTO refresh_tokens (user_id, expires_at) VALUES ($1, $2)  RETURNING token, user_id, expires_at, created_at`
 	var savedToken model.RefreshToken
 	err := r.db.Pgx.QueryRow(ctx, query,
