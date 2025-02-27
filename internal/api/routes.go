@@ -17,6 +17,14 @@ func (s *Server) RegisterRoutes() http.Handler {
 		auth.GET("/refresh", s.authHandler.RotateRefreshToken)
 		auth.GET("/signout", s.authHandler.SignOut)
 	}
+	job := r.Group("/job")
+	{
+		job.GET("", s.RequireAccessToken, s.jobApplicationHandler.FindAllByUserId)
+		job.GET("/:id", s.RequireAccessToken, s.jobApplicationHandler.FindById)
+		job.POST("", s.RequireAccessToken, s.jobApplicationHandler.Create)
+		job.PATCH("/:id", s.RequireAccessToken, s.jobApplicationHandler.Update)
+		job.DELETE("/:id", s.RequireAccessToken, s.jobApplicationHandler.Delete)
+	}
 
 	return r
 }
