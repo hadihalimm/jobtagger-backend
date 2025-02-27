@@ -35,6 +35,7 @@ func (s *Server) RequireAccessToken(c *gin.Context) {
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "access token expired"})
+			return
 		}
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return

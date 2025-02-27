@@ -15,9 +15,10 @@ import (
 )
 
 type Server struct {
-	port        int
-	db          *config.Database
-	authHandler *handler.AuthHandler
+	port                  int
+	db                    *config.Database
+	authHandler           *handler.AuthHandler
+	jobApplicationHandler *handler.JobApplicationHandler
 }
 
 func NewServer() *http.Server {
@@ -29,13 +30,19 @@ func NewServer() *http.Server {
 	service.InitAuth()
 	userRepo := repo.NewUserRepo(db)
 	refreshTokenRepo := repo.NewRefreshTokenRepo(db)
+	jobApplicationRepo := repo.NewJobApplicationRepo(db)
+
 	authService := service.NewAuthService(userRepo, refreshTokenRepo)
+	jobApplicationService := service.NewJobApplicationService(jobApplicationRepo)
+
 	authHandler := handler.NewAuthHandler(authService)
+	jobApplicationHandler := handler.NewJobApplicationHandler(jobApplicationService)
 
 	NewServer := &Server{
-		port:        port,
-		db:          db,
-		authHandler: authHandler,
+		port:                  port,
+		db:                    db,
+		authHandler:           authHandler,
+		jobApplicationHandler: jobApplicationHandler,
 	}
 
 	server := &http.Server{
