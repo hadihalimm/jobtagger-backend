@@ -74,3 +74,9 @@ CREATE TRIGGER update_users_table_updatedAt
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_modified_column();
+
+DROP TRIGGER IF EXISTS update_users_table_updatedAt ON job_applications;
+CREATE TRIGGER update_job_applications_table_updatedAt
+BEFORE UPDATE ON job_applications
+FOR EACH ROW
+EXECUTE FUNCTION update_modified_column();
