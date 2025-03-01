@@ -46,11 +46,10 @@ CREATE TABLE IF NOT EXISTS interviews (
 
 CREATE TABLE IF NOT EXISTS contacts (
     id SERIAL PRIMARY KEY,
-    application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
-    contact_name VARCHAR(100) NOT NULL,
-    contact_email VARCHAR(100),
-    contact_phone VARCHAR(20),
-    position VARCHAR(100),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20),
     notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

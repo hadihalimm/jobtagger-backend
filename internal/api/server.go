@@ -20,27 +20,31 @@ type Server struct {
 	authHandler           *handler.AuthHandler
 	jobApplicationHandler *handler.JobApplicationHandler
 	interviewHandler      *handler.InterviewHandler
+	contactHandler        *handler.ContactHandler
 }
 
 func NewServer() *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("PORT"))
 	db := config.ConnectToDatabase()
-	db.DropAllTables()
-	db.CreateAllTables()
+	// db.DropAllTables()
+	// db.CreateAllTables()
 
 	service.InitAuth()
 	userRepo := repo.NewUserRepo(db)
 	refreshTokenRepo := repo.NewRefreshTokenRepo(db)
 	jobApplicationRepo := repo.NewJobApplicationRepo(db)
 	interviewRepo := repo.NewInterviewRepo(db)
+	contactRepo := repo.NewContactRepo(db)
 
 	authService := service.NewAuthService(userRepo, refreshTokenRepo)
 	jobApplicationService := service.NewJobApplicationService(jobApplicationRepo)
 	interviewService := service.NewInterviewService(interviewRepo)
+	contactService := service.NewContactService(contactRepo)
 
 	authHandler := handler.NewAuthHandler(authService)
 	jobApplicationHandler := handler.NewJobApplicationHandler(jobApplicationService)
 	interviewHandler := handler.NewInterviewHandler(interviewService)
+	contactHandler := handler.NewContactHandler(contactService)
 
 	NewServer := &Server{
 		port:                  port,
@@ -48,6 +52,7 @@ func NewServer() *http.Server {
 		authHandler:           authHandler,
 		jobApplicationHandler: jobApplicationHandler,
 		interviewHandler:      interviewHandler,
+		contactHandler:        contactHandler,
 	}
 
 	server := &http.Server{
