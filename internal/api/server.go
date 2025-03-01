@@ -19,6 +19,7 @@ type Server struct {
 	db                    *config.Database
 	authHandler           *handler.AuthHandler
 	jobApplicationHandler *handler.JobApplicationHandler
+	interviewHandler      *handler.InterviewHandler
 }
 
 func NewServer() *http.Server {
@@ -31,18 +32,22 @@ func NewServer() *http.Server {
 	userRepo := repo.NewUserRepo(db)
 	refreshTokenRepo := repo.NewRefreshTokenRepo(db)
 	jobApplicationRepo := repo.NewJobApplicationRepo(db)
+	interviewRepo := repo.NewInterviewRepo(db)
 
 	authService := service.NewAuthService(userRepo, refreshTokenRepo)
 	jobApplicationService := service.NewJobApplicationService(jobApplicationRepo)
+	interviewService := service.NewInterviewService(interviewRepo)
 
 	authHandler := handler.NewAuthHandler(authService)
 	jobApplicationHandler := handler.NewJobApplicationHandler(jobApplicationService)
+	interviewHandler := handler.NewInterviewHandler(interviewService)
 
 	NewServer := &Server{
 		port:                  port,
 		db:                    db,
 		authHandler:           authHandler,
 		jobApplicationHandler: jobApplicationHandler,
+		interviewHandler:      interviewHandler,
 	}
 
 	server := &http.Server{
