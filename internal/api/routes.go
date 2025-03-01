@@ -34,5 +34,14 @@ func (s *Server) RegisterRoutes() http.Handler {
 		interview.DELETE("/:jobApplicationId/:interviewId", s.RequireAccessToken, s.interviewHandler.Delete)
 	}
 
+	contact := r.Group("/contact")
+	{
+		contact.POST("", s.RequireAccessToken, s.contactHandler.Create)
+		contact.GET("", s.RequireAccessToken, s.contactHandler.FindAllByUserId)
+		contact.GET("/:id", s.RequireAccessToken, s.contactHandler.FindById)
+		contact.PATCH("/:id", s.RequireAccessToken, s.contactHandler.Update)
+		contact.DELETE(":id", s.RequireAccessToken, s.contactHandler.Delete)
+	}
+
 	return r
 }
