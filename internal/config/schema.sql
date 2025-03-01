@@ -35,8 +35,10 @@ CREATE TABLE IF NOT EXISTS timelines (
 CREATE TABLE IF NOT EXISTS interviews (
     id SERIAL PRIMARY KEY,
     application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
-    interview_title VARCHAR(100) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     interview_date DATE,
+    position VARCHAR(100) NOT NULL,
+    company VARCHAR(100) NOT NULL,
     notes TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
