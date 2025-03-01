@@ -25,6 +25,14 @@ func (s *Server) RegisterRoutes() http.Handler {
 		job.PATCH("/:id", s.RequireAccessToken, s.jobApplicationHandler.Update)
 		job.DELETE("/:id", s.RequireAccessToken, s.jobApplicationHandler.Delete)
 	}
+	interview := r.Group("/interview")
+	{
+		interview.POST("/:jobApplicationId", s.RequireAccessToken, s.interviewHandler.Create)
+		interview.GET("/:jobApplicationId/:interviewId", s.RequireAccessToken, s.interviewHandler.FindById)
+		interview.GET("/:jobApplicationId", s.RequireAccessToken, s.interviewHandler.FindAllByApplicationId)
+		interview.PATCH("/:jobApplicationId/:interviewId", s.RequireAccessToken, s.interviewHandler.Update)
+		interview.DELETE("/:jobApplicationId/:interviewId", s.RequireAccessToken, s.interviewHandler.Delete)
+	}
 
 	return r
 }
