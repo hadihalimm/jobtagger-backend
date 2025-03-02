@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS job_applications (
 CREATE TABLE IF NOT EXISTS timelines (
     id SERIAL PRIMARY KEY,
     application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
-    timeline_name VARCHAR(100) NOT NULL,
+    content VARCHAR(200) NOT NULL,
+    timeline_date DATE NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -36,7 +37,7 @@ CREATE TABLE IF NOT EXISTS interviews (
     id SERIAL PRIMARY KEY,
     application_id INT NOT NULL REFERENCES job_applications(id) ON DELETE CASCADE,
     title VARCHAR(100) NOT NULL,
-    interview_date DATE,
+    interview_date DATE NOT NULL,
     position VARCHAR(100) NOT NULL,
     company VARCHAR(100) NOT NULL,
     notes TEXT,
