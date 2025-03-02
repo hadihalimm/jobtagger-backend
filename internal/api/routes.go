@@ -43,5 +43,14 @@ func (s *Server) RegisterRoutes() http.Handler {
 		contact.DELETE(":id", s.RequireAccessToken, s.contactHandler.Delete)
 	}
 
+	timeline := r.Group("/timeline/:jobApplicationId")
+	{
+		timeline.POST("", s.RequireAccessToken, s.timelineHandler.Create)
+		timeline.GET("", s.RequireAccessToken, s.timelineHandler.FindAllByApplicationId)
+		timeline.GET("/:timelineId", s.RequireAccessToken, s.timelineHandler.FindById)
+		timeline.PATCH("/:timelineId", s.RequireAccessToken, s.timelineHandler.Update)
+		timeline.DELETE("/:timelineId", s.RequireAccessToken, s.timelineHandler.Delete)
+	}
+
 	return r
 }
